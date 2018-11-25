@@ -28,6 +28,7 @@
         NSData *imageData = [NSData dataWithContentsOfURL:url];
         UIImage *image = [UIImage imageWithData:imageData];
         dispatch_async(dispatch_get_main_queue(), ^{
+            self.imageView.image = nil;
             self.imageView.image = image;
         });
     });

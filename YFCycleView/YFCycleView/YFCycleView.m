@@ -88,6 +88,10 @@ static NSString *const YFCycleViewCellReuseIdentifier = @"YFCycleViewCellReuseId
         self.pageControl.frame = CGRectMake(pageControlX, pageControlY, pageControlW, pageControlH);
         self.pageControl.numberOfPages = self -> _urls.count;
     }
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:self -> _urls.count * 500 inSection:0];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionNone animated:NO];
+    });
     if (![[NSThread currentThread] isMainThread]) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [self reloadData];
