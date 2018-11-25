@@ -91,9 +91,11 @@ static NSString *const YFCycleViewCellReuseIdentifier = @"YFCycleViewCellReuseId
         offset = _urls.count;
     }
     [scrollView setContentOffset:CGPointMake(offset * self.frame.size.width, 0)];
-    NSTimer *timer = [NSTimer timerWithTimeInterval:self.cycleTimeGap == 0 ? 5 : self.cycleTimeGap target:self selector:@selector(autoCycleAction) userInfo:nil repeats:YES];
-    self.autoCycleTimer = timer;
-    [[NSRunLoop currentRunLoop] addTimer:timer forMode:NSRunLoopCommonModes];
+    if (self.autoCycleTimer == nil) {
+        NSTimer *timer = [NSTimer timerWithTimeInterval:self.cycleTimeGap == 0 ? 5 : self.cycleTimeGap target:self selector:@selector(autoCycleAction) userInfo:nil repeats:YES];
+        self.autoCycleTimer = timer;
+        [[NSRunLoop currentRunLoop] addTimer:timer forMode:NSRunLoopCommonModes];
+    }
 }
 
 - (void)autoCycleAction {
