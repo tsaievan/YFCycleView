@@ -21,6 +21,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, strong) UIImage *placeholderImage;
 
+@property (nonatomic, strong) UIColor *pageIndicatorTintColor;
+
+@property (nonatomic, strong) UIColor *currentPageIndicatorTintColor;
+
+
 - (instancetype)initWithFrame:(CGRect)frame;
 
 - (instancetype)initWithFrame:(CGRect)frame urls:(nullable NSArray <NSURL *> *)urls;

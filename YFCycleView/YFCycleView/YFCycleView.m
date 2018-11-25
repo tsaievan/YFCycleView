@@ -57,6 +57,8 @@ static NSString *const YFCycleViewCellReuseIdentifier = @"YFCycleViewCellReuseId
                 CGFloat pageControlY = (self.frame.origin.y  + self.frame.size.height) - pageControlH;
                 self.pageControl.frame = CGRectMake(pageControlX, pageControlY, pageControlW, pageControlH);
                 self.pageControl.numberOfPages = self -> _urls.count;
+                self.pageControl.pageIndicatorTintColor = (self.pageIndicatorTintColor == nil) ? [UIColor orangeColor] : self.pageIndicatorTintColor;
+                self.pageControl.currentPageIndicatorTintColor = (self.currentPageIndicatorTintColor == nil) ? [UIColor blueColor] : self.currentPageIndicatorTintColor;
             }
             NSIndexPath *indexPath = [NSIndexPath indexPathForRow:(self -> _urls.count) * 500 inSection:0];
             if (self -> _urls == nil || self -> _urls.count == 0) {
@@ -88,6 +90,8 @@ static NSString *const YFCycleViewCellReuseIdentifier = @"YFCycleViewCellReuseId
         CGFloat pageControlY = (self.frame.origin.y  + self.frame.size.height) - pageControlH;
         self.pageControl.frame = CGRectMake(pageControlX, pageControlY, pageControlW, pageControlH);
         self.pageControl.numberOfPages = self -> _urls.count;
+        self.pageControl.pageIndicatorTintColor = (self.pageIndicatorTintColor == nil) ? [UIColor orangeColor] : self.pageIndicatorTintColor;
+        self.pageControl.currentPageIndicatorTintColor = (self.currentPageIndicatorTintColor == nil) ? [UIColor blueColor] : self.currentPageIndicatorTintColor;
     }
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:self -> _urls.count * 500 inSection:0];
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -116,8 +120,19 @@ static NSString *const YFCycleViewCellReuseIdentifier = @"YFCycleViewCellReuseId
     }else {
         cell.url = _urls[indexPath.item % _urls.count];
     }
+//    cell.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.2, 1.2);
     return cell;
 }
+
+- (void)collectionView:(UICollectionView *)collectionView willDisplayCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath {
+//    cell.transform = CGAffineTransformScale(CGAffineTransformIdentity, 0.8, 0.8);
+}
+
+- (void)collectionView:(UICollectionView *)collectionView didEndDisplayingCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath {
+//    cell.transform = CGAffineTransformScale(CGAffineTransformIdentity, 0.8, 0.8);
+}
+
+
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     NSInteger offset = scrollView.contentOffset.x / self.bounds.size.width;
@@ -154,8 +169,8 @@ static NSString *const YFCycleViewCellReuseIdentifier = @"YFCycleViewCellReuseId
 - (UIPageControl *)pageControl {
     if (!_pageControl) {
         _pageControl = [[UIPageControl alloc] initWithFrame:CGRectMake(0, 0, 200, 30)];
-        _pageControl.pageIndicatorTintColor = [UIColor whiteColor];
-        _pageControl.pageIndicatorTintColor = [UIColor grayColor];
+        _pageControl.pageIndicatorTintColor = (self.pageIndicatorTintColor == nil) ? [UIColor orangeColor] : self.pageIndicatorTintColor;
+        _pageControl.currentPageIndicatorTintColor = (self.pageIndicatorTintColor == nil) ? [UIColor orangeColor] : self.pageIndicatorTintColor;
         _pageControl.numberOfPages = 10;
     }
     return _pageControl;

@@ -29,8 +29,8 @@
     });
     cycleView.cycleTimeGap = 2;
     cycleView.autoCycle = YES;
-//    UIImage *image = [UIImage imageNamed:@"02.jpg"];
-//    cycleView.placeholderImage = image;
+    cycleView.pageIndicatorTintColor = [UIColor redColor];
+    cycleView.currentPageIndicatorTintColor = [UIColor yellowColor];
     [self.view addSubview:cycleView];
 }
 
