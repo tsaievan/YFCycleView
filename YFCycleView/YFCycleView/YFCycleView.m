@@ -79,6 +79,15 @@ static NSString *const YFCycleViewCellReuseIdentifier = @"YFCycleViewCellReuseId
     if (_urls == nil || _urls.count == 0) {
         _urls = urls;
     }
+    if (self.superview != nil) {
+        [self.superview addSubview:self.pageControl];
+        CGFloat pageControlW = self.pageControl.bounds.size.width;
+        CGFloat pageControlH = self.pageControl.bounds.size.height;
+        CGFloat pageControlX = (self.frame.size.width - pageControlW) * 0.5;
+        CGFloat pageControlY = (self.frame.origin.y  + self.frame.size.height) - pageControlH;
+        self.pageControl.frame = CGRectMake(pageControlX, pageControlY, pageControlW, pageControlH);
+        self.pageControl.numberOfPages = self -> _urls.count;
+    }
     if (![[NSThread currentThread] isMainThread]) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [self reloadData];
