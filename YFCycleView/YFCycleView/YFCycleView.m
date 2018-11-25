@@ -46,6 +46,7 @@ static NSString *const YFCycleViewCellReuseIdentifier = @"YFCycleViewCellReuseId
         self.bounces = NO;
         self.showsVerticalScrollIndicator = NO;
         self.showsHorizontalScrollIndicator = NO;
+        self.backgroundColor = [UIColor whiteColor];
         [self registerClass:[YFCycleViewCell class] forCellWithReuseIdentifier:YFCycleViewCellReuseIdentifier];
         dispatch_async(dispatch_get_main_queue(), ^{
             if (self.superview != nil) {
@@ -61,7 +62,7 @@ static NSString *const YFCycleViewCellReuseIdentifier = @"YFCycleViewCellReuseId
             if (self -> _urls == nil || self -> _urls.count == 0) {
                 indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
             }
-            [self scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionNone animated:NO];
+            [self scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionLeft animated:NO];
             if (self.autoCycle) {
                 NSTimer *timer = [NSTimer timerWithTimeInterval:self.cycleTimeGap == 0 ? 5 : self.cycleTimeGap target:self selector:@selector(autoCycleAction) userInfo:nil repeats:YES];
                 self.autoCycleTimer = timer;
@@ -90,7 +91,7 @@ static NSString *const YFCycleViewCellReuseIdentifier = @"YFCycleViewCellReuseId
     }
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:self -> _urls.count * 500 inSection:0];
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionNone animated:NO];
+        [self scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionLeft animated:NO];
     });
     if (![[NSThread currentThread] isMainThread]) {
         dispatch_async(dispatch_get_main_queue(), ^{

@@ -17,7 +17,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    YFCycleView *cycleView = [[YFCycleView alloc] initWithFrame:CGRectMake(0, 100, self.view.bounds.size.width, 200) urls:nil placeholderImage:[UIImage imageNamed:@"02.jpg"]];
+    YFCycleView *cycleView = [[YFCycleView alloc] initWithFrame:CGRectMake(0, 100, self.view.bounds.size.width, 200) urls:nil placeholderImage:[UIImage imageNamed:@"01.jpg"]];
     NSMutableArray *mtArr = @[].mutableCopy;
     for (int i = 0; i < 5; i++) {
         NSString *fileString = [NSString stringWithFormat:@"%02d.jpg", i + 1];
