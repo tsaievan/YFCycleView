@@ -33,6 +33,11 @@
     });
 }
 
+- (void)setPlaceholderImage:(UIImage *)placeholderImage {
+    _placeholderImage = placeholderImage;
+    self.imageView.image = placeholderImage;
+}
+
 - (UIImageView *)imageView {
     if (!_imageView) {
         _imageView = [[UIImageView alloc] initWithFrame:self.bounds];

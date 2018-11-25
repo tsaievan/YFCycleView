@@ -19,7 +19,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, assign) NSTimeInterval cycleTimeGap;
 
+@property (nonatomic, strong) UIImage *placeholderImage;
+
 - (instancetype)initWithFrame:(CGRect)frame;
+
+- (instancetype)initWithFrame:(CGRect)frame urls:(nullable NSArray <NSURL *> *)urls;
+
+- (instancetype)initWithFrame:(CGRect)frame urls:(nullable NSArray <NSURL *> *)urls placeholderImage:(UIImage *)placeholderImage;
 
 @end
 

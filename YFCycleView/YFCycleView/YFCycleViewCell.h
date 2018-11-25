@@ -14,6 +14,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, strong) NSURL *url;
 
+@property (nonatomic, strong) UIImage *placeholderImage;
+
 @end
 
 NS_ASSUME_NONNULL_END

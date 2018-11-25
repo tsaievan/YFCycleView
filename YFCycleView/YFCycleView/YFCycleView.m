@@ -24,6 +24,13 @@ static NSString *const YFCycleViewCellReuseIdentifier = @"YFCycleViewCellReuseId
     NSArray <NSURL *> * _urls;
 }
 
+- (instancetype)initWithFrame:(CGRect)frame urls:(NSArray <NSURL *> *)urls placeholderImage:(UIImage *)placeholderImage {
+    if (self = [self initWithFrame:frame urls:urls]) {
+        _placeholderImage = placeholderImage;
+    }
+    return self;
+}
+
 - (instancetype)initWithFrame:(CGRect)frame urls:(NSArray <NSURL *> *)urls {
     if (self = [self initWithFrame:frame]) {
         _urls = urls;
@@ -51,6 +58,9 @@ static NSString *const YFCycleViewCellReuseIdentifier = @"YFCycleViewCellReuseId
                 self.pageControl.numberOfPages = self -> _urls.count;
             }
             NSIndexPath *indexPath = [NSIndexPath indexPathForRow:(self -> _urls.count) * 500 inSection:0];
+            if (self -> _urls == nil || self -> _urls.count == 0) {
+                indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+            }
             [self scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionNone animated:NO];
             if (self.autoCycle) {
                 NSTimer *timer = [NSTimer timerWithTimeInterval:self.cycleTimeGap == 0 ? 5 : self.cycleTimeGap target:self selector:@selector(autoCycleAction) userInfo:nil repeats:YES];
@@ -79,12 +89,19 @@ static NSString *const YFCycleViewCellReuseIdentifier = @"YFCycleViewCellReuseId
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
+    if (_urls == nil || _urls.count == 0) {
+        return 1;
+    }
     return _urls.count * 1000;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     YFCycleViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:YFCycleViewCellReuseIdentifier forIndexPath:indexPath];
-    cell.url = _urls[indexPath.item % _urls.count];
+    if (_urls == nil || _urls.count == 0) {
+        cell.placeholderImage = self.placeholderImage;
+    }else {
+        cell.url = _urls[indexPath.item % _urls.count];
+    }
     return cell;
 }
 
@@ -92,7 +109,6 @@ static NSString *const YFCycleViewCellReuseIdentifier = @"YFCycleViewCellReuseId
     NSInteger offset = scrollView.contentOffset.x / self.bounds.size.width;
     NSInteger pageNumber = offset % _urls.count;
     self.pageControl.currentPage = pageNumber;
-    NSLog(@"%ld", offset);
 }
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
