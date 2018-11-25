@@ -25,7 +25,7 @@ static NSString *const YFCycleViewCellReuseIdentifier = @"YFCycleViewCellReuseId
 }
 
 - (instancetype)initWithFrame:(CGRect)frame urls:(NSArray <NSURL *> *)urls {
-    if (self = [super initWithFrame:frame]) {
+    if (self = [self initWithFrame:frame]) {
         _urls = urls;
     }
     return self;
@@ -41,11 +41,22 @@ static NSString *const YFCycleViewCellReuseIdentifier = @"YFCycleViewCellReuseId
         self.showsHorizontalScrollIndicator = NO;
         [self registerClass:[YFCycleViewCell class] forCellWithReuseIdentifier:YFCycleViewCellReuseIdentifier];
         dispatch_async(dispatch_get_main_queue(), ^{
+            if (self.superview != nil) {
+                [self.superview addSubview:self.pageControl];
+                CGFloat pageControlW = self.pageControl.bounds.size.width;
+                CGFloat pageControlH = self.pageControl.bounds.size.height;
+                CGFloat pageControlX = (self.frame.size.width - pageControlW) * 0.5;
+                CGFloat pageControlY = (self.frame.origin.y  + self.frame.size.height) - pageControlH;
+                self.pageControl.frame = CGRectMake(pageControlX, pageControlY, pageControlW, pageControlH);
+                self.pageControl.numberOfPages = self -> _urls.count;
+            }
             NSIndexPath *indexPath = [NSIndexPath indexPathForRow:(self -> _urls.count) * 500 inSection:0];
             [self scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionNone animated:NO];
-            NSTimer *timer = [NSTimer timerWithTimeInterval:self.cycleTimeGap == 0 ? 5 : self.cycleTimeGap target:self selector:@selector(autoCycleAction) userInfo:nil repeats:YES];
-            self.autoCycleTimer = timer;
-            [[NSRunLoop currentRunLoop] addTimer:timer forMode:NSRunLoopCommonModes];
+            if (self.autoCycle) {
+                NSTimer *timer = [NSTimer timerWithTimeInterval:self.cycleTimeGap == 0 ? 5 : self.cycleTimeGap target:self selector:@selector(autoCycleAction) userInfo:nil repeats:YES];
+                self.autoCycleTimer = timer;
+                [[NSRunLoop currentRunLoop] addTimer:timer forMode:NSRunLoopCommonModes];
+            }
         });
     }
     return self;
@@ -78,6 +89,13 @@ static NSString *const YFCycleViewCellReuseIdentifier = @"YFCycleViewCellReuseId
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    NSInteger offset = scrollView.contentOffset.x / self.bounds.size.width;
+    NSInteger pageNumber = offset % _urls.count;
+    self.pageControl.currentPage = pageNumber;
+    NSLog(@"%ld", offset);
+}
+
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
     [self.autoCycleTimer invalidate];
     self.autoCycleTimer = nil;
 }
@@ -91,7 +109,7 @@ static NSString *const YFCycleViewCellReuseIdentifier = @"YFCycleViewCellReuseId
         offset = _urls.count;
     }
     [scrollView setContentOffset:CGPointMake(offset * self.frame.size.width, 0)];
-    if (self.autoCycleTimer == nil) {
+    if (self.autoCycle) {
         NSTimer *timer = [NSTimer timerWithTimeInterval:self.cycleTimeGap == 0 ? 5 : self.cycleTimeGap target:self selector:@selector(autoCycleAction) userInfo:nil repeats:YES];
         self.autoCycleTimer = timer;
         [[NSRunLoop currentRunLoop] addTimer:timer forMode:NSRunLoopCommonModes];
@@ -102,5 +120,15 @@ static NSString *const YFCycleViewCellReuseIdentifier = @"YFCycleViewCellReuseId
     [self setContentOffset:CGPointMake(self.contentOffset.x + self.bounds.size.width, 0) animated:YES];
 }
 
+
+- (UIPageControl *)pageControl {
+    if (!_pageControl) {
+        _pageControl = [[UIPageControl alloc] initWithFrame:CGRectMake(0, 0, 200, 30)];
+        _pageControl.pageIndicatorTintColor = [UIColor whiteColor];
+        _pageControl.pageIndicatorTintColor = [UIColor grayColor];
+        _pageControl.numberOfPages = 10;
+    }
+    return _pageControl;
+}
 
 @end

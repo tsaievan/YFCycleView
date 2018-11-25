@@ -26,6 +26,7 @@
     }
     cycleView.urls = mtArr.copy;
     cycleView.cycleTimeGap = 2;
+    cycleView.autoCycle = YES;
     [self.view addSubview:cycleView];
 }
 
